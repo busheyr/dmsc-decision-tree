@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DMSc Concentration Decision Tree</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+      background-color: #f2f2f2;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background-color: white;
+      padding: 50px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+      font-size: 2em;
+    }
+    label {
+      display: block;
+      font-size: 1.5em;
+      margin: 20px 0;
+    }
+    button {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 10px;
+      background-color: #0056b3;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #003d80;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>DMSc Concentration Decision Tree</h1>
+    <div id="question"></div>
+    <form id="form">
+      <div id="options"></div>
+      <br>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        text: "Are you more interested in advancing your clinical skills or transitioning into leadership or administrative roles?",
+        options: ["Clinical Skills", "Leadership/Admin"]
+      },
+      {
+        text: "Do you currently work with patients facing mental health or substance use challenges?",
+        options: ["Yes", "No"]
+      },
+      {
+        text: "Is your primary work setting a hospital, emergency department, or critical care unit?",
+        options: ["Yes", "No"]
+      },
+      {
+        text: "Are you passionate about teaching or mentoring other healthcare professionals?",
+        options: ["Yes", "No"]
+      },
+      {
+        text: "Do you want to focus on improving patients' health through nutrition, exercise, and lifestyle change?",
+        options: ["Yes", "No"]
+      },
+      {
+        text: "Do you practice or plan to practice internationally, or in underserved global communities?",
+        options: ["Yes", "No"]
+      },
+      {
+        text: "Do you prefer to deepen expertise in your current area of clinical practice without changing specialty focus?",
+        options: ["Yes", "No"]
+      },
+      {
+        text: "Are you early in your career or looking for a flexible core curriculum to build foundational skills?",
+        options: ["Yes", "No"]
+      },
+      {
+        text: "Do you have experience in emergency, trauma, or acute care settings?",
+        options: ["Yes", "No"]
+      },
+      {
+        text: "Would you prefer to focus on systems-level impact, such as healthcare policy, budgeting, and organizational leadership?",
+        options: ["Yes", "No"]
+      },
+      {
+        text: "Do you want to work primarily with inpatients across various departments in a hospital setting, without specializing in a specific area like emergency or critical care?",
+        options: ["Yes", "No"]
+      },
+      {
+        text: "Do you want a flexible, generalist track that allows you to explore diverse topics without narrowing to one specialty?",
+        options: ["Yes", "No"]
+      },
+      {
+        text: "Are you seeking to formalize your years of experience and apply your expertise broadly, rather than shifting into a new specialty?",
+        options: ["Yes", "No"]
+      }
+    ];
+
+    let currentQuestion = 0;
+    const responses = [];
+
+    const questionEl = document.getElementById("question");
+    const optionsEl = document.getElementById("options");
+    const formEl = document.getElementById("form");
+
+    function showQuestion(index) {
+      const q = questions[index];
+      questionEl.innerHTML = `<h2>${q.text}</h2>`;
+      optionsEl.innerHTML = q.options.map(
+        (opt, i) => `
+          <label>
+            <input type="radio" name="response" value="${opt}" ${i === 0 ? 'checked' : ''}/> ${opt}
+          </label>
+        `
+      ).join('');
+    }
+
+    formEl.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const selected = document.querySelector('input[name="response"]:checked').value;
+      responses.push(selected);
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        showQuestion(currentQuestion);
+      } else {
+        showResults();
+      }
+    });
+
+    function showResults() {
+      questionEl.innerHTML = `<h2>Thank you! Based on your responses, we recommend reviewing the following concentrations:</h2>`;
+      optionsEl.innerHTML = `<p>(Logic-based recommendation coming soon. You answered: ${responses.join(", ")})</p>`;
+      formEl.style.display = "none";
+    }
+
+    showQuestion(currentQuestion);
+  </script>
+</body>
+</html>
