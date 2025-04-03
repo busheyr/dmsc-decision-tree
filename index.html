@@ -108,8 +108,25 @@
       }
     ];
 
+    const answerMap = [
+      { Clinical: [], Leadership: ["Administrative Medicine"] },
+      { Yes: ["Behavioral Medicine", "Addiction Medicine"], No: [] },
+      { Yes: ["Critical Care", "EMGH", "Hospital Medicine"], No: [] },
+      { Yes: ["Medical Education"], No: [] },
+      { Yes: ["Lifestyle Medicine"], No: [] },
+      { Yes: ["International PA"], No: [] },
+      { Yes: ["Advanced Professional Practice"], No: [] },
+      { Yes: ["Core"], No: [] },
+      { Yes: ["EMGH", "Critical Care"], No: [] },
+      { Yes: ["Administrative Medicine"], No: [] },
+      { Yes: ["Hospital Medicine"], No: [] },
+      { Yes: ["Core"], No: [] },
+      { Yes: ["Advanced Professional Practice"], No: [] }
+    ];
+
     let currentQuestion = 0;
     const responses = [];
+    const recommendations = new Set();
 
     const questionEl = document.getElementById("question");
     const optionsEl = document.getElementById("options");
@@ -131,6 +148,10 @@
       e.preventDefault();
       const selected = document.querySelector('input[name="response"]:checked').value;
       responses.push(selected);
+      const mapping = answerMap[currentQuestion];
+      const match = mapping[selected] || mapping[selected === "Yes" ? "Yes" : "No"] || [];
+      match.forEach(rec => recommendations.add(rec));
+
       currentQuestion++;
       if (currentQuestion < questions.length) {
         showQuestion(currentQuestion);
@@ -141,7 +162,11 @@
 
     function showResults() {
       questionEl.innerHTML = `<h2>Thank you! Based on your responses, we recommend reviewing the following concentrations:</h2>`;
-      optionsEl.innerHTML = `<p>(Logic-based recommendation coming soon. You answered: ${responses.join(", ")})</p>`;
+      if (recommendations.size === 0) {
+        optionsEl.innerHTML = `<p>No specific match found. Consider the Core or Advanced Professional Practice track for flexibility.</p>`;
+      } else {
+        optionsEl.innerHTML = `<ul style="font-size: 1.5em; text-align: left; display: inline-block;">${[...recommendations].map(r => `<li>${r}</li>`).join('')}</ul>`;
+      }
       formEl.style.display = "none";
     }
 
