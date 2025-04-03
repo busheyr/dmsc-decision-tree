@@ -46,10 +46,10 @@
     <h1>DMSc Concentration Decision Tree</h1>
     <div id="question"></div>
     <form id="form">
-      <div id="options"></div>
-      <br>
-      <button type="submit">Submit</button>
-    </form>
+  <br>
+  <button type="submit">Submit</button>
+</form>
+<div id="options"></div>
   </div>
 
   <script>
@@ -166,7 +166,9 @@ console.log("Q#" + currentQuestion, "Answer:", selected, "→", match);
       if (recommendations.size === 0) {
         optionsEl.innerHTML = `<p>No specific match found. Consider the Core or Advanced Professional Practice track for flexibility.</p>`;
       } else {
-        optionsEl.innerHTML = `<ul style="font-size: 1.5em; text-align: left; display: inline-block;">${[...recommendations].map(r => `<li>${r}</li>`).join('')}</ul>`;
+        optionsEl.innerHTML = '<ul style="font-size: 1.5em; text-align: left; display: inline-block; padding: 0; list-style-type: disc;">' +
+  Array.from(recommendations).map(r => `<li style="margin-bottom: 10px;">${r}</li>`).join('') +
+  '</ul>';
       }
       formEl.style.display = "none";
     }
