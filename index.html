@@ -150,6 +150,7 @@
       responses.push(selected);
       const mapping = answerMap[currentQuestion];
       const match = mapping[selected] || [];
+console.log("Q#" + currentQuestion, "Answer:", selected, "→", match);
       match.forEach(rec => recommendations.add(rec));
 
       currentQuestion++;
