@@ -46,8 +46,9 @@
     <h1>DMSc Concentration Decision Tree</h1>
     <div id="question"></div>
     <form id="form">
-  <br>
-  <button type="submit">Submit</button>
+$1
+<br>
+<button type="submit">Submit</button>
 </form>
 <div id="options"></div>
   </div>
@@ -162,15 +163,31 @@ console.log("Q#" + currentQuestion, "Answer:", selected, "→", match);
     });
 
     function showResults() {
-      questionEl.innerHTML = `<h2>Thank you! Based on your responses, we recommend reviewing the following concentrations:</h2>`;
-      if (recommendations.size === 0) {
-        optionsEl.innerHTML = `<p>No specific match found. Consider the Core or Advanced Professional Practice track for flexibility.</p>`;
-      } else {
-        optionsEl.innerHTML = '<ul style="font-size: 1.5em; text-align: left; display: inline-block; padding: 0; list-style-type: disc;">' +
-  Array.from(recommendations).map(r => `<li style="margin-bottom: 10px;">${r}</li>`).join('') +
-  '</ul>';
-      }
-      formEl.style.display = "none";
+  questionEl.innerHTML = `<h2>Thank you! Based on your responses, we recommend reviewing the following concentrations:</h2>`;
+
+  const tally = {};
+  responses.forEach((response, i) => {
+    const mapping = answerMap[i];
+    const matched = mapping[response] || [];
+    matched.forEach(item => {
+      tally[item] = (tally[item] || 0) + 1;
+    });
+  });
+
+  const sorted = Object.entries(tally)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 2);
+
+  if (sorted.length === 0) {
+    optionsEl.innerHTML = `<p>No specific match found. Consider the Core or Advanced Professional Practice track for flexibility.</p>`;
+  } else {
+    optionsEl.innerHTML = '<ul style="font-size: 1.5em; text-align: left; display: inline-block; padding: 0; list-style-type: disc;">' +
+      sorted.map(([name]) => `<li style="margin-bottom: 10px;">${name}</li>`).join('') +
+      '</ul>';
+  }
+
+  formEl.style.display = "none";
+}
     }
 
     showQuestion(currentQuestion);
